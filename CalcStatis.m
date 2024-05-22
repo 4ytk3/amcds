@@ -2,42 +2,41 @@ classdef CalcStatis
     methods (Static)
         % 平均を計算する関数
         function mean = calc_mean(data)
-            N = length(data);
-
-            % 要素の合計を計算
-            sum = 0;
+            N = length(data); % データ数を取得
+            sum = 0; % 合計を初期化
             for i = 1:N
-                sum = sum + data(i);
+                sum = sum + data(i); % 1からN個のデータを合計
             end
-        
-            % 平均を計算
-            mean = sum / N;
+            mean = sum / N; % 合計をデータ数で除算
         end
         
+        % 列ごとに平均を計算する関数
+        function column_means = calc_col_means(data)
+            [num_rows, num_cols] = size(data); % 行列のサイズを取得
+            column_means = zeros(1, num_cols); % 結果を格納するための行列を初期化
+            for col = 1:num_cols % 各列に対して平均を計算
+                col_sum = 0; % 合計を初期化
+                for row = 1:num_rows
+                    col_sum = col_sum + data(row, col); % 1からnum_rowsのデータを合計
+                end
+                column_means(col) = col_sum / num_rows;
+            end
+        end
+
         % 中心化する関数
         function centered_data = center_data(data)
-            % 平均を計算
-            mean = CalcStatis.calc_mean(data);
-            
-            % 中心化
-            centered_data = data - mean;
+            centered_data = data - CalcStatis.calc_mean(data);
         end
         
         % 平方和を計算する関数
         function s_xx = sum_squares(data)
-            % 平方和を計算
             s_xx = sum(data .^ 2);
         end
         
         % 偏差積和を計算する関数
         function s_xy = sum_products(data1, data2)
-            % 偏差を計算
-            mean1 = CalcStatis.calc_mean(data1);
-            mean2 = CalcStatis.calc_mean(data2);
-            
-            % 偏差積和を計算
-            dev1 = data1 - mean1;
-            dev2 = data2 - mean2;
+            dev1 = data1 - CalcStatis.calc_mean(data1);
+            dev2 = data2 - CalcStatis.calc_mean(data2);
             s_xy = sum(dev1 .* dev2);
         end
         
@@ -51,41 +50,12 @@ classdef CalcStatis
         
         % スケーリングする関数
         function scaled_data = scale_data(data)
-            % 標準偏差を計算
-            sd = CalcStatis.calc_sd(data);
-        
-            % スケーリング
-            scaled_data = data / sd;
+            scaled_data = data / CalcStatis.calc_sd(data);
         end
         
         % 標準化する関数
-        function standardized_data = std_data(data)
-            % 標準偏差を計算
-            sd = CalcStatis.calc_sd(data);
-        
-            % 中心化
-            centered_data = CalcStatis.center_data(data);
-            
-            % 標準化を実行
-            standardized_data = centered_data / sd;
-        end
-
-        % 列ごとに平均を計算する関数
-        function column_means = calc_col_means(data)
-            % 行列のサイズを取得
-            [num_rows, num_cols] = size(data);
-        
-            % 結果を格納するためのベクトルを初期化
-            column_means = zeros(1, num_cols);
-        
-            % 各列に対して平均を計算
-            for col = 1:num_cols
-                col_sum = 0;
-                for row = 1:num_rows
-                    col_sum = col_sum + data(row, col);
-                end
-                column_means(col) = col_sum / num_rows;
-            end
+        function stded_data = std_data(data)
+            stded_data = CalcStatis.center_data(data) / CalcStatis.calc_sd(data);
         end
     end
 end
