@@ -1,13 +1,8 @@
 classdef CalcStatis
     methods (Static)
-        %要素数を計算する関数
-        function N = count_element(data)
-            N = length(data);
-        end
-
         % 平均を計算する関数
         function mean = calc_mean(data)
-            N = CalcStatis.count_element(data);
+            N = length(data);
 
             % 要素の合計を計算
             sum = 0;
