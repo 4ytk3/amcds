@@ -1,12 +1,27 @@
 classdef CalcStatis
     methods (Static)
         %要素数を計算する関数
-        function N = count_element(data)
+        function N = count_element(data);
             N = length(data);
         end
+function column_means = calculate_column_means(matrix)
+    % 行列のサイズを取得
+    [num_rows, num_cols] = size(matrix);
 
+    % 結果を格納するためのベクトルを初期化
+    column_means = zeros(1, num_cols);
+
+    % 各列に対して平均を計算
+    for col = 1:num_cols
+        column_sum = 0;
+        for row = 1:num_rows
+            column_sum = column_sum + matrix(row, col);
+        end
+        column_means(col) = column_sum / num_rows;
+    end
+end
         % 平均を計算する関数
-        function mean = calc_mean(data)
+        function mean = calculate_mean(data)
             N = CalcStatis.count_element(data);
 
             % 要素の合計を計算
@@ -22,7 +37,7 @@ classdef CalcStatis
         % 中心化する関数
         function centered_data = center_data(data)
             % 平均を計算
-            mean = CalcStatis.calc_mean(data);
+            mean = CalcStatis.calculate_mean(data);
             
             % 中心化
             centered_data = data - mean;
@@ -37,8 +52,8 @@ classdef CalcStatis
         % 偏差積和を計算する関数
         function s_xy = sum_products(data1, data2)
             % 偏差を計算
-            mean1 = CalcStatis.calc_mean(data1);
-            mean2 = CalcStatis.calc_mean(data2);
+            mean1 = CalcStatis.calculate_mean(data1);
+            mean2 = CalcStatis.calculate_mean(data2);
             
             % 偏差積和を計算
             dev1 = data1 - mean1;
@@ -64,7 +79,7 @@ classdef CalcStatis
         end
         
         % 標準化する関数
-        function standardized_data = std_data(data)
+        function standardized_data = standardize_data(data)
             % 標準偏差を計算
             sd = CalcStatis.calc_sd(data);
         
@@ -73,24 +88,6 @@ classdef CalcStatis
             
             % 標準化を実行
             standardized_data = centered_data / sd;
-        end
-
-        % 列ごとに平均を計算する関数
-        function column_means = calc_col_means(data)
-            % 行列のサイズを取得
-            [num_rows, num_cols] = size(data);
-        
-            % 結果を格納するためのベクトルを初期化
-            column_means = zeros(1, num_cols);
-        
-            % 各列に対して平均を計算
-            for col = 1:num_cols
-                col_sum = 0;
-                for row = 1:num_rows
-                    col_sum = col_sum + data(row, col);
-                end
-                column_means(col) = col_sum / num_rows;
-            end
         end
     end
 end
