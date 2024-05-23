@@ -30,7 +30,8 @@ classdef CalcStatis
 
         % 平方和を計算する関数
         function s_xx = sum_squares(data)
-            s_xx = sum(data .^ 2); % データの二乗を計算
+            % 中心化したデータの二乗を計算し合計
+            s_xx = sum(CalcStatis.center_data(data) .^ 2);
         end
 
         % 偏差積和を計算する関数
@@ -43,18 +44,20 @@ classdef CalcStatis
         % 標準偏差を計算する関数
         function sd = calc_sd(data)
             % 標準偏差を計算
-            N = length(data);
-            s_xx = CalcStatis.sum_squares(data);
-            sd = sqrt(s_xx) / (N - 1);
+            N = length(data); % データ数を取得
+            s_xx = CalcStatis.sum_squares(data); % 平方和を計算
+            sd = sqrt(s_xx / (N - 1)); % 平方和の平方根をデータ数-1で除算
         end
 
         % スケーリングする関数
         function scaled_data = scale_data(data)
+            % 各データを標準偏差で除算
             scaled_data = data / CalcStatis.calc_sd(data);
         end
 
         % 標準化する関数
         function stded_data = std_data(data)
+            % 中心化したデータを標準偏差で除算
             stded_data = CalcStatis.center_data(data) / CalcStatis.calc_sd(data);
         end
     end
