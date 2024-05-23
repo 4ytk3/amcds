@@ -44,8 +44,9 @@ classdef CalcStatis
         function sd = calc_sd(data)
             % 標準偏差を計算
             N = length(data);
-            s_xx = CalcStatis.sum_squares(data);
-            sd = sqrt(s_xx) / (N - 1);
+            s_xx = CalcStatis.sum_squares(data)
+            s_xx / (N - 1)
+            sd = sqrt(s_xx / (N - 1))
         end
         
         % スケーリングする関数
