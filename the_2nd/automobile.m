@@ -1,11 +1,9 @@
 % CSVファイルの読み込み
-data = readtable('10_2024_0612_課題用データ.csv');
+data = readtable('Automobile.csv');
 
-X = table2array(data(:, 2:end)); % 説明変数X
-y = table2array(data(:, 1)); % 目的変数y
-
-N = size(data,1);
-M = rank(X_scaled);
+X = table2array(data(:, 2:6)); % 説明変数X
+y = table2array(data(:, 7)); % 目的変数y
+X(isnan(X)) = 0;  % NaNがある場合0に置き換える
 
 % 標準化
 X_m = mean(X);
@@ -14,6 +12,9 @@ X_scaled = (X - X_m) ./ X_std;
 y_m = mean(y);
 y_std = std(y);
 y_scaled = (y - y_m) ./ y_std;
+
+N = size(data,1);
+M = rank(X_scaled);
 
 % 主成分分析
 V = 1/(N - 1) * (X_scaled' * X_scaled); % 共分散行列
@@ -48,7 +49,7 @@ for n = 1:M
     nexttile
     plot(y_scaled, y_pred_pcr, 'o')
     hold on
-    plot([min(y_scaled), max(y_scaled)], [min(y_scaled), max(y_scaled)], 'r--')
+    plot([min(y_scaled), max(y_scaled)], [min(y_scaled), max(y_scaled)])
     grid on
     xlabel('実測値')
     ylabel('予測値')
@@ -90,7 +91,7 @@ for n = 1:M
     nexttile
     plot(y_scaled, y_pred_pls, 'o')
     hold on
-    plot([min(y_scaled), max(y_scaled)], [min(y_scaled), max(y_scaled)], 'r--')
+    plot([min(y_scaled), max(y_scaled)], [min(y_scaled), max(y_scaled)])
     grid on
     xlabel('実測値')
     ylabel('予測値')
